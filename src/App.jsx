@@ -1,33 +1,54 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import RouteModal from './components/RouteModal'  
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className="container w-screen">
+        <div className="flex">
+          <h1 className="text-2xl font-bold">Lista de Rutas</h1>
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+
+      <div className="main">
+        <div className="text-left pt-5">
+          <button 
+            onClick={() => setIsModalOpen(true)}  
+            className="bg-[#48c78e] hover:bg-[#3aa576] text-white font-bold py-2 px-4 rounded"
+          >
+            Añadir Ruta
+          </button>
+        </div>
+
+        <div className="overflow-x-auto pt-5">
+          <table className="min-w-full bg-white border border-gray-300">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="px-4 py-2 border">ID</th>
+                <th className="px-4 py-2 border">Conductor</th>
+                <th className="px-4 py-2 border">Fecha</th>
+                <th className="px-4 py-2 border">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="px-4 py-2 border">234258</td>
+                <td className="px-4 py-2 border">10</td>
+                <td className="px-4 py-2 border">2024-10-28</td>
+                <td className="px-4 py-2 border">Ver+</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+
+      <RouteModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)}  // Cierra el modal
+      />
     </>
   )
 }
