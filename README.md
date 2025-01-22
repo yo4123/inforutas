@@ -30,7 +30,7 @@ Para ejecutar la aplicación, abrir tres terminales diferentes y ejecutar los si
 
 ### Todos los comandos a la vez
 
-- Desde la raíz del proyecto ejecutar: `npm run dev`: `npm run start`
+- Desde la raíz del proyecto ejecutar: : `npm run start`
 
 ## Componentes
 
