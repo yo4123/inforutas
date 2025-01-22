@@ -1,9 +1,18 @@
-import { useState } from 'react'
-import './App.css'
-import RouteModal from './components/RouteModal'  
+import { useState } from 'react';
+import './App.css';
+import RoutesTable from './components/RoutesTable';
+import RouteModal from './components/RouteModal';
+import ImportCSVModal from './components/ImportCSVModal';
+import { PlusCircle, Upload } from 'lucide-react';
 
 function App() {
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+  const refreshTable = () => {
+    setRefreshTrigger(prev => prev + 1);
+  };
 
   return (
     <>
@@ -15,42 +24,40 @@ function App() {
 
       <div className="main">
         <div className="text-left pt-5">
-          <button 
-            onClick={() => setIsModalOpen(true)}  
-            className="bg-[#48c78e] hover:bg-[#3aa576] text-white font-bold py-2 px-4 rounded"
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="bg-[#48c78e] hover:bg-[#3aa576] text-white font-bold py-2 px-4 rounded mr-2"
           >
+            <PlusCircle className="inline mr-2" />
             Añadir Ruta
+          </button>
+
+          <button
+            onClick={() => setIsImportModalOpen(true)}
+            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+          >
+            <Upload className="inline mr-2" />
+            Importar CSV
           </button>
         </div>
 
         <div className="overflow-x-auto pt-5">
-          <table className="min-w-full bg-white border border-gray-300">
-            <thead>
-              <tr className="bg-gray-100">
-                <th className="px-4 py-2 border">ID</th>
-                <th className="px-4 py-2 border">Conductor</th>
-                <th className="px-4 py-2 border">Fecha</th>
-                <th className="px-4 py-2 border">Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="px-4 py-2 border">234258</td>
-                <td className="px-4 py-2 border">10</td>
-                <td className="px-4 py-2 border">2024-10-28</td>
-                <td className="px-4 py-2 border">Ver+</td>
-              </tr>
-            </tbody>
-          </table>
+          <RoutesTable refreshTrigger={refreshTrigger} />
         </div>
       </div>
 
-      <RouteModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)}  // Cierra el modal
+      <RouteModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        refreshTable={refreshTable}
+      />
+
+      <ImportCSVModal
+        isOpen={isImportModalOpen}
+        onClose={() => setIsImportModalOpen(false)}
       />
     </>
-  )
+  );
 }
 
-export default App
+export default App;

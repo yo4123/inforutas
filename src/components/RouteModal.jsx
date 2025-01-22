@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { X, Search } from 'lucide-react';
 import RouteForm from './RouteForm';
 
-const RouteModal = ({ isOpen, onClose }) => {
+const RouteModal = ({ isOpen, onClose, onSave = () => {}, refreshTable }) => {
   if (!isOpen) return null;
 
   const [searchRouteId, setSearchRouteId] = useState('');
@@ -30,7 +30,6 @@ const RouteModal = ({ isOpen, onClose }) => {
       }
 
       const route = await response.json();
-
       setFormData({
         routeId: route.id.toString(),
         driver: route.driverId.toString(),
@@ -50,10 +49,47 @@ const RouteModal = ({ isOpen, onClose }) => {
     }
   };
 
+  const handleSave = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/routes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',   
+        },
+        body: JSON.stringify(formData)
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al guardar la ruta');
+      }
+
+      const result = await response.json();
+      if (result.success) {
+        onSave(formData);
+        refreshTable();  
+        onClose();
+      } else {
+        setError(result.message);
+      }
+    } catch (err) {
+      setError('Error al guardar la ruta');
+      console.error('Error:', err);
+    }
+  };
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg w-full max-w-md">
-        {/*  Section */}
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-2">
+      <div className="bg-white rounded-lg w-full max-w-md overflow-auto">
+        <div className="p-1 border-b flex justify-between items-center bg-[#48c78e]">
+          <h5 className="text-sm font-semibold ml-1 text-white">AÑADIR RUTA</h5>
+          <button 
+            onClick={onClose}
+            className="text-gray-500 hover:text-gray-700"
+          >
+            <X size={24} />
+          </button>
+        </div>
+
         <div className="p-4 border-b">
           <div className="flex gap-2">
             <input
@@ -61,7 +97,7 @@ const RouteModal = ({ isOpen, onClose }) => {
               value={searchRouteId}
               onChange={(e) => setSearchRouteId(e.target.value)}
               placeholder="78901"
-              className="flex-1 p-2 border rounded"
+              className="flex-1 p-2 text-sm border rounded"
             />
             <button
               onClick={searchRoute}
@@ -74,20 +110,12 @@ const RouteModal = ({ isOpen, onClose }) => {
           {error && <p className="text-red-500 mt-2 text-sm">{error}</p>}
         </div>
 
-               {/*  Section */}
-        <div className="p-4 border-b flex justify-between items-center">
-          <h2 className="text-xl font-semibold">Añadir ruta</h2>
-          <button 
-            onClick={onClose}
-            className="text-gray-500 hover:text-gray-700"
-          >
-            <X size={24} />
-          </button>
-        </div>
-
-   
         <div className="p-4">
-          <RouteForm formData={formData} setFormData={setFormData} />
+          <RouteForm 
+            formData={formData}
+            setFormData={setFormData}
+            isEditing={false}
+          />
         </div>
  
         <div className="p-4 border-t flex justify-end gap-2">
@@ -98,13 +126,14 @@ const RouteModal = ({ isOpen, onClose }) => {
             Cancelar
           </button>
           <button
+            onClick={handleSave}
             className="px-4 py-2 bg-[#48c78e] hover:bg-[#3aa576] text-white rounded"
           >
             Guardar
           </button>
         </div>
       </div>
-    </div>
+    </div> 
   );
 };
 
