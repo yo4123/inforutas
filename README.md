@@ -2,6 +2,22 @@
 
 La aplicación consiste en un sistema de información de rutas de entrega, en el que el usuario puede ver las rutas que están en el sistema, editar información de las rutas y crear nuevas rutas a partir de datos sincronizados de un servicio externo.
 
+# Primeros pasos
+
+Para comenzar a utilizar inforutas, siga estos pasos:
+
+- Clone el repositorio en su máquina local:
+  git clone https://github.com/yo4123/inforutas.git
+
+- Navegue hasta el directorio del proyecto:
+  cd inforutas
+
+- Instale las dependencias:
+  npm install
+
+- Inicie el servidor de desarrollo:
+  npm run start
+
 ## Ejecución desde la consola
 
 ### Manualmente
