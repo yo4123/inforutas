@@ -14,6 +14,15 @@ function App() {
     setRefreshTrigger(prev => prev + 1);
   };
 
+  const trackEvent = (eventCategory, eventAction, eventLabel) => {
+    if (window.gtag) {
+      window.gtag('event', eventAction, {
+        event_category: eventCategory,
+        event_label: eventLabel,
+      });
+    }
+  };
+
   return (
     <>
       <div className="container w-screen">
@@ -24,7 +33,7 @@ function App() {
 
       <div className="main">
         <div className="text-left pt-5">
-          <button
+          {/*<button
             onClick={() => setIsModalOpen(true)}
             className="bg-[#48c78e] hover:bg-[#3aa576] text-white font-bold py-2 px-4 rounded mr-2"
           >
@@ -34,6 +43,28 @@ function App() {
 
           <button
             onClick={() => setIsImportModalOpen(true)}
+            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+          >
+            <Upload className="inline mr-2" />
+            Importar CSV
+          </button> */}
+
+          <button
+            onClick={() => {
+              setIsModalOpen(true);
+              trackEvent('modal', 'open', 'Añadir Ruta');
+            }}
+            className="bg-[#48c78e] hover:bg-[#3aa576] text-white font-bold py-2 px-4 rounded mr-2"
+          >
+            <PlusCircle className="inline mr-2" />
+            Añadir Ruta
+          </button>
+
+          <button
+            onClick={() => {
+              setIsImportModalOpen(true);
+              trackEvent('modal', 'open', 'Importar CSV');
+            }}
             className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
           >
             <Upload className="inline mr-2" />
